@@ -25,7 +25,7 @@ while getopts ":t:h" arg; do
     esac
 done
 
-[ -z $TAG ] && TAG=demo-cnn
+[ -z $TAG ] && TAG=futr3d_mike
 
 docker build \
     -t $TAG \

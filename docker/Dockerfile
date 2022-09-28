@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/root/.local/lib/python3.10/site-packages:$PYTHONPATH
@@ -18,7 +18,8 @@ RUN apt-get install -y --no-install-recommends \
         wget \
         ca-certificates \
         python3 \
-        python3-pyqt5.qtsvg
+        python3-pyqt5.qtsvg \
+        gcc-5
 
 RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
     python3 /tmp/get-pip.py --user
@@ -26,7 +27,21 @@ RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
 COPY requirements.txt /tmp
 
 # install python modules in /root/.local
-RUN pip3 install --user --no-cache-dir -r /tmp/requirements.txt
+RUN pip3 install --user --no-cache-dir -r /tmp/requirements.txt\
+    pip3 install openmim\
+    mim install mmcv-full \
+    pip install mmdet \
+    pip install mmsegmentation \
+    git clone https://github.com/open-mmlab/mmdetection3d.git \
+    cd mmdetection3d \
+    pip install -v -e .
+    # pip3 install mmcv-full== -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11.0/index.html \
+    # pip3 install mmdet \
+    # pip install mmsegmentation \
+    # git clone https://github.com/open-mmlab/mmdetection3d.git \
+    # cd mmdetection3d\
+    # pip install -v -e .
+
 
 # use the default bashrc provided by Ubuntu & change the color to yellow
 RUN cp /etc/skel/.bashrc /etc/bash.bashrc && \

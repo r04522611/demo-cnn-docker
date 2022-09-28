@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
 
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/root/.local/lib/python3.10/site-packages:$PYTHONPATH
@@ -27,20 +27,22 @@ RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
 COPY requirements.txt /tmp
 
 # install python modules in /root/.local
-RUN pip3 install --user --no-cache-dir -r /tmp/requirements.txt\
-    pip3 install openmim\
+RUN pip3 install --user --no-cache-dir -r /tmp/requirements.txt
+
+
+# install mmdete & mmdetection3d in /root/.local
+RUN pip3 install openmim\
     mim install mmcv-full \
-    pip install mmdet \
-    pip install mmsegmentation \
+    pip3 install mmdet \
+    pip3 install mmsegmentation \
     git clone https://github.com/open-mmlab/mmdetection3d.git \
     cd mmdetection3d \
-    pip install -v -e .
-    # pip3 install mmcv-full== -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11.0/index.html \
-    # pip3 install mmdet \
-    # pip install mmsegmentation \
-    # git clone https://github.com/open-mmlab/mmdetection3d.git \
-    # cd mmdetection3d\
-    # pip install -v -e .
+    pip3 install -v -e . \
+    pip3 install cumm-cu113 \
+    pip3 install spconv-cu113\
+    pip install nuscenes-devkit
+
+RUN git clone https://github.com/r04522611/KP-FUTR3D.git
 
 
 # use the default bashrc provided by Ubuntu & change the color to yellow
